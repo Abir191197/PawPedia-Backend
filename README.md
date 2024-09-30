@@ -1,6 +1,7 @@
-# Bike Rental Service for Tourists or Locals
+# Pet Care Tips & Stories
 
-In Cox's Bazar, a thriving coastal town renowned for its scenic Inani beach, Jhankar Mahbub identified an opportunity to enhance tourism. He established a bike rental service designed to streamline exploration for both tourists and locals. Jhankar implemented an intuitive online booking system that allows users to easily rent bikes, facilitating seamless navigation of Cox's Bazar's diverse landscapes and attractions.
+# Overview
+"Pet Care Tips & Stories" offers a valuable mix of practical advice and engaging tales for pet owners. It covers essential care aspects such as proper nutrition, exercise, grooming, and regular veterinary hospital visits to ensure pets stay healthy and happy. Additionally, it includes heartwarming stories of love and loyalty between pets and their owners, as well as inspiring adoption and rescue tales. Together, these tips and stories provide both guidance on maintaining pet well-being and emotional moments that highlight the deep bond between humans and their pets.
 
 ## Technology Stack
 
@@ -67,100 +68,103 @@ Updates the logged-in user's profile.
 
 ---
 
-### Bike Routes
+### Pet Post Routes
 
-#### Create Bike (Admin Only)
+#### Create Post
 
 - **Method:** `POST`
-- **Endpoint:** `/api/bikes`
+- **Endpoint:** `/api/pet/posts`
 
-Creates a new bike entry.
+Creates a new Post entry.
+| Parameter | Type | Description |
+| :------------- | :------- | :------------------------------------------- |
+| `title` | `string` | **Required**. Title of the post. |
+| `content` | `string` | **Required**. Main content or description of the post. |
+| `category` | `string` | **Required**. Category of the post (e.g., care tips, pet stories). |
+| `isPremium` | `boolean`| **Optional**. Indicates if the post is premium content. |
+| `premiumAmount`| `number` | **Optional**. Amount required for accessing premium content. |
+| `images` | `string[]` | URLs of images related to the post. |
+| `upvote` | `number` | Number of upvotes the post has received. |
+| `downvote` | `number` | Number of downvotes the post has received. |
 
-| Parameter      | Type     | Description                            |
-| :------------- | :------- | :------------------------------------- |
-| `name`         | `string` | **Required**. Name of the bike model.  |
-| `description`  | `string` | **Required**. Description of the bike. |
-| `pricePerHour` | `number` | **Required**. Rental price per hour.   |
-| `cc`           | `number` | Engine capacity in cubic centimeters.  |
-| `year`         | `number` | Manufacturing year of the bike.        |
-| `model`        | `string` | Model of the bike.                     |
-| `brand`        | `string` | Brand of the bike.                     |
-
-#### Get All Bikes
+#### Get All Posts
 
 - **Method:** `GET`
-- **Endpoint:** `/api/bikes`
+- **Endpoint:** `/api/pet/posts`
 
-Retrieves a list of all available bikes.
+Retrieves a list of all available posts.
 
-#### Update Bike (Admin Only)
+#### Get Single Posts
+
+- **Method:** `GET`
+- **Endpoint:** `/api/pet/posts/:id`
+
+Retrieves a single post by its ID.
+
+| Parameter | Type     | Description                               |
+| :-------- | :------- | :---------------------------------------- |
+| `id`      | `string` | **Required**. ID of the post to retrieve. |
+
+#### Update Post
 
 - **Method:** `PUT`
-- **Endpoint:** `/api/bikes/:id`
+- **Endpoint:** `/api/pet/posts/:id`
 
-Updates an existing bike entry.
-
-| Parameter      | Type     | Description                             |
-| :------------- | :------- | :-------------------------------------- |
-| `id`           | `string` | **Required**. ID of the bike to update. |
-| `pricePerHour` | `number` | Updated rental price per hour.          |
-
-#### Delete Bike (Admin Only)
+#### Delete Post
 
 - **Method:** `DELETE`
-- **Endpoint:** `/api/bikes/:id`
+- **Endpoint:** `/api/pet/posts/:id`
 
-Deletes a bike entry.
+Deletes a post entry.
 
 | Parameter | Type     | Description                             |
 | :-------- | :------- | :-------------------------------------- |
-| `id`      | `string` | **Required**. ID of the bike to delete. |
+| `id`      | `string` | **Required**. ID of the post to delete. |
 
 ---
 
-### Rental Routes
-
-#### Create Rental
+#### Create Comments
 
 - **Method:** `POST`
-- **Endpoint:** `/api/rentals`
+- **Endpoint:** `/posts/:postId/comments`
 
-Creates a new rental for a specific bike.
+| Parameter   | Type             | Description                                |
+| :---------- | :--------------- | :----------------------------------------- |
+| `_id`       | `any`            | Unique MongoDB identifier for the comment. |
+| `id`        | `string`         | Unique identifier for the comment.         |
+| `postId`    | `Types.ObjectId` | ID of the post the comment belongs to.     |
+| `authorId`  | `Types.ObjectId` | ID of the author of the comment.           |
+| `content`   | `string`         | Content of the comment.                    |
+| `createdAt` | `Date`           | Date when the comment was created.         |
+| `updatedAt` | `Date`           | Date when the comment was last updated.    |
 
-| Parameter   | Type     | Description                                                |
-| :---------- | :------- | :--------------------------------------------------------- |
-| `bikeId`    | `string` | **Required**. ID of the bike to rent.                      |
-| `startTime` | `string` | **Required**. Start time of the rental. (Format: ISO 8601) |
-
-#### Return Bike (Admin Only)
-
-- **Method:** `PUT`
-- **Endpoint:** `/api/rentals/:id/return`
-
-Marks the return of a rented bike.
-
-| Parameter | Type     | Description                                         |
-| :-------- | :------- | :-------------------------------------------------- |
-| `id`      | `string` | **Required**. ID of the rental to mark as returned. |
-
-#### Get All Rentals for User
+#### Get Comments By Post Id
 
 - **Method:** `GET`
-- **Endpoint:** `/api/rentals`
+- **Endpoint:** `/posts/:postId/comments`
 
-Retrieves rental history for the logged-in user.
+#### Comment update
+
+- **Method:** `PUT`
+- **Endpoint:** `/comments/:id`
+
+#### Comment delete
+
+- **Method:** `DELETE`
+- **Endpoint:** `/comments/:id`
 
 ## Backend Resource
 
-- [Bike-rental-service-Backend](https://github.com/Abir191197/Bike-rental-service-Backend)
+- [PawPedia]()
 
 ## Installation
 
 Install my-project with npm
 
 ```bash
- git clone https://github.com/Abir191197/Bike-rental-service-Backend.git
-   cd Bike-rental-service-Backend
+ git clone https://github.com/Abir191197/PawPedia.git
+
+   cd PawPedia
 npm install
 
 PORT=3000
