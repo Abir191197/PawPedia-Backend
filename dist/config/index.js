@@ -10,6 +10,7 @@ exports.default = {
     db_url: process.env.DB_URL,
     jwt_access_secret: process.env.JWT_ACCESS_SECRET,
     NODE_ENV: process.env.NODE_ENV,
+    bcrypt_salt_rounds: process.env.bcrypt_salt_rounds,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     SESSION_SECRET: process.env.SESSION_SECRET,
