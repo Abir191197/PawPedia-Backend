@@ -54,7 +54,7 @@ const logInUser = async (payload: TLoginUser) => {
   }
 
   // Generate tokens
-  const jwtPayload = { email: user.email, role: user.role };
+  const jwtPayload = { email: user.email, role: user.role, _id: user._id, phone: user.phone, address: user.address };
   const accessToken = generateAccessToken(jwtPayload);
   const refreshToken = generateRefreshToken(jwtPayload);
 

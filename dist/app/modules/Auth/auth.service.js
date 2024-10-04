@@ -62,7 +62,7 @@ const logInUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new appError_1.default(http_status_1.default.UNAUTHORIZED, "Invalid credentials!");
     }
     // Generate tokens
-    const jwtPayload = { email: user.email, role: user.role };
+    const jwtPayload = { email: user.email, role: user.role, _id: user._id, phone: user.phone, address: user.address };
     const accessToken = (0, jwt_1.generateAccessToken)(jwtPayload);
     const refreshToken = (0, jwt_1.generateRefreshToken)(jwtPayload);
     return { user, accessToken, refreshToken };
