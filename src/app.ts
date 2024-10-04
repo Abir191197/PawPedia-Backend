@@ -1,11 +1,10 @@
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import express, { Request, Response } from "express";
 import session from "express-session";
-import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import APInotfound from "./app/middlewares/APInotfound";
-import cors from "cors";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import router from "./app/routes";
-import cookieParser from "cookie-parser";
-import passport from "./app/modules/PassportOath2.0/passport";
 import config from "./config";
 
 const app = express();
@@ -18,7 +17,8 @@ app.use(cookieParser());
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "",
+    "http://localhost:3000",
+    "https://paw-pedia-frontend.vercel.app",
   ],
   credentials: true,
   methods: "GET,POST,PUT,DELETE",

@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
-const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 const APInotfound_1 = __importDefault(require("./app/middlewares/APInotfound"));
-const cors_1 = __importDefault(require("cors"));
+const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 const routes_1 = __importDefault(require("./app/routes"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const config_1 = __importDefault(require("./config"));
 const app = (0, express_1.default)();
 // Parsers
@@ -19,7 +19,8 @@ app.use((0, cookie_parser_1.default)());
 const corsOptions = {
     origin: [
         "http://localhost:5173",
-        "",
+        "http://localhost:3000",
+        "https://paw-pedia-frontend.vercel.app",
     ],
     credentials: true,
     methods: "GET,POST,PUT,DELETE",

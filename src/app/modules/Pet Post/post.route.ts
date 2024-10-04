@@ -9,13 +9,13 @@ const router = express.Router();
 // Routes for Pet Posts
 router.get(
   "/posts",
-  auth(USER_ROLE.admin, USER_ROLE.user),
+
   petPostControllers.getAllPosts // Get all pet posts
 );
 
 router.post(
   "/posts",
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  // auth(USER_ROLE.admin, USER_ROLE.user),
   petPostControllers.createPost // Create a new pet post
 );
 

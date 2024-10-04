@@ -29,7 +29,7 @@ const UserSchema = new mongoose_1.Schema({
     email: { type: String },
     password: { type: String },
     phone: { type: String },
-    address: { type: String },
+    address: { type: String, unique: true },
     googleId: { type: String },
     role: { type: String, enum: ["admin", "user"], required: true },
     followers: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Users", default: [] }],
