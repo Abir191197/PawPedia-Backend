@@ -15,7 +15,7 @@ router.get(
 
 router.post(
   "/posts",
-  // auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.user),
   petPostControllers.createPost // Create a new pet post
 );
 

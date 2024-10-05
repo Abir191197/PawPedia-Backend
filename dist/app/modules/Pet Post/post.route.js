@@ -12,9 +12,7 @@ const router = express_1.default.Router();
 // Routes for Pet Posts
 router.get("/posts", post_controller_1.petPostControllers.getAllPosts // Get all pet posts
 );
-router.post("/posts", 
-// auth(USER_ROLE.admin, USER_ROLE.user),
-post_controller_1.petPostControllers.createPost // Create a new pet post
+router.post("/posts", (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.user), post_controller_1.petPostControllers.createPost // Create a new pet post
 );
 router.get("/posts/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.user), post_controller_1.petPostControllers.getPostById // Get a specific pet post by ID
 );
