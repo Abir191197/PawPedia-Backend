@@ -17,17 +17,6 @@ router.put(
   auth(USER_ROLE.admin, USER_ROLE.user),
   userControllers.updatedUser,
 );
-router.put(
-  "/addFollowing",
-  auth(USER_ROLE.admin, USER_ROLE.user),
-  userControllers.updatedUser
-);
-
-router.get(
-  "/getMyFollowers",
-  auth(USER_ROLE.admin, USER_ROLE.user),
-  userControllers.getMyFollowers
-);
 
 
 

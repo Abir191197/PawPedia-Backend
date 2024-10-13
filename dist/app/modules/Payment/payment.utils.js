@@ -13,52 +13,67 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyPayment = exports.sendPaymentRequest = void 0;
-const axios_1 = __importDefault(require("axios")); // Use this line only if running in a Node.js environment
+const axios_1 = __importDefault(require("axios"));
 const config_1 = __importDefault(require("../../../config"));
-const url = config_1.default.PAYMENT_URL;
-const headers = {
-    "Content-Type": "application/json",
-};
-function sendPaymentRequest(paymentData) {
+// Function to send a payment request
+function sendPaymentRequest(userData) {
     return __awaiter(this, void 0, void 0, function* () {
-        // Construct the payload dynamically
+        console.log("User data for payment request:", userData);
+        // Payment API URL from the configuration
+        const url = config_1.default.PAYMENT_URL;
+        // Headers for the request
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "application/json", // Optional, but good practice
+        };
+        // Payload for the payment request
         const payload = {
             store_id: config_1.default.STORE_ID,
             signature_key: config_1.default.SIGNATURE_KEY,
-            tran_id: paymentData.bookingId,
-            success_url: `https://bike-rental-service-backend-two.vercel.app/api/payment/confirmation?bookingId=${paymentData.bookingId}&status=success`,
-            fail_url: `https://bike-rental-service-backend-two.vercel.app/api/payment/confirmation?bookingId=${paymentData.bookingId}&status=failed`, // Fixed to use bookingId instead of orderId
-            cancel_url: "https://cox-s-sea-side-bike-frontend.vercel.app/",
-            amount: (100).toFixed(2), // Assuming a fixed amount, update as needed
-            currency: "BDT", // Assuming BDT as currency, adjust if needed
-            desc: "Advance Payment",
-            cus_name: `${paymentData.UserData.name}`,
-            cus_email: paymentData.UserData.email,
-            cus_add1: paymentData.UserData.address, // Assuming this is a single field in TUser
-            cus_add2: "", // You can add an additional address field if needed
-            cus_city: "", // Add city if available in TUser
-            cus_state: "", // Add state if available in TUser
-            cus_postcode: "", // Add postcode if available in TUser
-            cus_country: "", // Add country if available in TUser
-            cus_phone: paymentData.UserData.phone.toString(),
-            type: "json",
+            tran_id: userData.bookingId, // Transaction/booking ID
+            success_url: `https://paw-pedia-backend.vercel.app/api/payment/confirmation?postId=${userData.postId}&userId=${userData.userId}&bookingId=${userData.bookingId}&status=success`,
+            fail_url: `https://paw-pedia-backend.vercel.app/api/payment/confirmation?bookingId=${userData.bookingId}&status=failed`,
+            cancel_url: "https://paw-pedia-frontend.vercel.app/", // Update the frontend cancel URL
+            amount: (100).toFixed(2), // Fixed amount (can be dynamic if needed)
+            currency: "BDT", // Currency (Bangladeshi Taka)
+            desc: "Advance Payment", // Description of the transaction
+            cus_name: userData.name, // Customer's name
+            cus_email: userData.email, // Customer's email
+            cus_add1: userData.address, // Customer's address
+            cus_add2: "", // Optional second address field
+            cus_city: "", // Optional city field
+            cus_state: "", // Optional state field
+            cus_postcode: "", // Optional postcode field
+            cus_country: "BD", // Optional country field, assumed to be Bangladesh
+            cus_phone: userData.phone.toString(), // Customer's phone number
+            type: "json", // Expected response type
         };
+        // Log the payload and headers for debugging purposes
+        console.log("Sending payment request to:", url);
+        console.log("Payload:", payload);
+        console.log("Headers:", headers);
         try {
-            const response = yield axios_1.default.post(url, payload, {
-                headers: headers,
-            });
+            const response = yield axios_1.default.post(url, payload, { headers });
+            console.log("Payment response:", response.data);
             return response.data;
         }
         catch (error) {
-            console.error("Error:", error);
+            console.error("Error during payment request:", error);
+            if (error) {
+                console.error("Payment request failed with response:");
+            }
+            else {
+                console.error("Unexpected error:");
+            }
             throw error;
         }
     });
 }
 exports.sendPaymentRequest = sendPaymentRequest;
+// Function to verify a payment using the transaction ID
 function verifyPayment(tnxId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const verifyUrl = `${config_1.default.PAYMENT_VERIFY_URL}`; // URL to verify the payment
+        const verifyUrl = `${config_1.default.PAYMENT_VERIFY_URL}`;
         try {
             const response = yield axios_1.default.get(verifyUrl, {
                 params: {
@@ -68,11 +83,18 @@ function verifyPayment(tnxId) {
                     request_id: tnxId,
                 },
             });
+            console.log("Verification response:", response.data);
             return response.data;
         }
         catch (error) {
-            console.error("Payment validation failed:", error);
-            throw new Error("Payment validation failed!");
+            console.error("Payment verification error:", error);
+            if (error) {
+                console.error("Verification failed with response:");
+            }
+            else {
+                console.error("Unexpected error:");
+            }
+            throw new Error("Payment verification failed!");
         }
     });
 }

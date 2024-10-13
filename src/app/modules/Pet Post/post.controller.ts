@@ -4,6 +4,7 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { IPetPost } from "./post.interface";
 import { PetPostService } from "./post.service";
+import { JwtPayload } from "jsonwebtoken";
 
 const getAllPosts = catchAsync(async (req, res) => {
   const posts = await PetPostService.getAllPosts();
@@ -16,25 +17,24 @@ const getAllPosts = catchAsync(async (req, res) => {
 });
 
 const createPost = catchAsync(async (req, res) => {
-  if (!req.user) {
-    return sendResponse(res, {
-      statusCode: httpStatus.UNAUTHORIZED,
-      success: false,
-      message: "User not authenticated",
-    });
-  }
-  const newPost: Partial<IPetPost> = { ...req.body, authorId: req.user._id };
-  const createdPost = await PetPostService.createPost(newPost as any);
-  sendResponse(res, {
-    statusCode: httpStatus.CREATED,
-    success: true,
-    message: "Pet post created successfully",
-    data: createdPost,
-  });
+ const payload = {
+   fileInformation: req.file,
+   authUserInformation: req.user,
+   typeInformation: req.body,
+ };
+console.log("payload", payload)
+   const result = await PetPostService.createPost(payload as any);
+   sendResponse(res, {
+     statusCode: httpStatus.OK,
+     success: true,
+     message: "File uploaded successfully",
+     data: result,
+   });
 });
 
-const getPostById = catchAsync(async (req, res) => {
-  const post = await PetPostService.getPostById(req.params.id);
+
+const getPostByUserId = catchAsync(async (req, res) => {
+  const post = await PetPostService.getPostByUserIdFromDB(req.params.id);
   if (!post) {
     return sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
@@ -87,6 +87,20 @@ const deletePost = catchAsync(async (req, res) => {
   });
 });
 
+
+const createComment = catchAsync(async (req, res) => {
+  
+
+  const comment = await PetPostService.createCommentIntoDB(req.body,req.user as any);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Comment created successfully",
+    data: comment,
+  });
+});
+
+
 const getCommentsByPostId = catchAsync(async (req, res) => {
   const comments = await PetPostService.getCommentsByPostId(req.params.postId);
   sendResponse(res, {
@@ -98,56 +112,97 @@ const getCommentsByPostId = catchAsync(async (req, res) => {
 });
 
 
+const createUpvote = catchAsync(async (req, res) => {
+  // Fetch the postId from request parameters and the user from the token
+  const { postId } = req.params;
+  const user = req.user;
+
+  // Call the service function to handle the upvote
+  const post = await PetPostService.createUpvoteIntoDB(postId, user as any);
+
+  // Send response back to client
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Upvote registered successfully",
+    data: post,
+  });
+});
 
 
-//   const updatedComment = await PetPostService.updateComment(
-//     req.params.postId,
-//     req.params.id,
-//     req.body.content
-//   );
-//   if (!updatedComment) {
-//     return sendResponse(res, {
-//       statusCode: httpStatus.NOT_FOUND,
-//       success: false,
-//       message: "Comment not found",
-//       data: null,
-//     });
-//   }
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Comment updated successfully",
-//     data: updatedComment,
-//   });
-// });
+const DownVote = catchAsync(async (req, res) => {
+  // Fetch the postId from request parameters and the user from the token
+  const { postId } = req.params; // Correctly extract postId
+  const user = req.user;
 
-// const deleteComment = catchAsync(async (req, res) => {
-//   const deletedComment = await PetPostService.deleteComment(
-//     req.params.postId,
-//     req.params.id
-//   );
-//   if (!deletedComment) {
-//     return sendResponse(res, {
-//       statusCode: httpStatus.NOT_FOUND,
-//       success: false,
-//       message: "Comment not found",
-//       data: null,
-//     });
-//   }
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Comment deleted successfully",
-//     data: null,
-//   });
-// });
+  // Log the postId for debugging
+  console.log(postId);
+
+  // Call the service function to handle the downvote
+  const post = await PetPostService.DownVoteIntoDB(postId, user as any);
+
+  // Send response back to client
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Downvote registered successfully",
+    data: post,
+  });
+});
+
+const PaymentController = catchAsync(async (req, res) => {
+ 
+  const { postId } = req.params; 
+  const user = req.user;
+  
+
+  
+
+  // Call the service function to handle the downvote
+  const post = await PetPostService.paymentService(postId, user as any);
+console.log(postId)
+  // Send response back to client
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment  successfully",
+    data: post,
+  });
+});
+
+
+const followingController = catchAsync(async (req, res) => {
+  // Fetch the postId from request parameters and the user from the token
+  const { postId } = req.params;
+  const user = req.user;
+
+  // Call the service function to handle the upvote
+  const post = await PetPostService.createFollowingIntoDB(postId, user as any);
+
+  // Send response back to client
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Following successfully",
+    data: post,
+  });
+});
+
+
+
+
+
 
 export const petPostControllers = {
   getAllPosts,
   createPost,
-  getPostById,
+  getPostByUserId,
   updatePost,
   deletePost,
   getCommentsByPostId,
-  
+  createComment,
+  createUpvote,
+  DownVote,
+  PaymentController,
+  followingController,
 };

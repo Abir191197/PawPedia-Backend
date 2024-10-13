@@ -19,10 +19,12 @@ const http_status_1 = __importDefault(require("http-status"));
 const findUserFromDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (payload !== null) {
-            const result = yield user_model_1.default.findOne({
-                email: payload.email,
-            }).select("-password");
-            return result;
+            // Find the user by email and populate following and followers fields
+            const result = yield user_model_1.default.findOne({ email: payload.email })
+                .populate("following", "name email role profileImage") // Populate following with specified fields
+                .populate("followers", "name email role profileImage") // Populate followers with specified fields
+                .select("-password"); // Exclude password from the returned object
+            return result; // Return the populated user object
         }
     }
     catch (error) {
@@ -46,43 +48,7 @@ const updatedUserIntoDB = (payload, updateData) => __awaiter(void 0, void 0, voi
         throw new appError_1.default(http_status_1.default.BAD_REQUEST, "Failed to update user");
     }
 });
-const addFollowingToUser = (payload, updateData) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        if (payload !== null) {
-            const updatedUser = yield user_model_1.default.findOneAndUpdate({ email: payload.email }, { $addToSet: { following: updateData.following } }, { new: true, runValidators: true }).select("-password");
-            if (!updatedUser) {
-                throw new appError_1.default(http_status_1.default.NOT_FOUND, "User not found");
-            }
-            return updatedUser;
-        }
-        else {
-            throw new appError_1.default(http_status_1.default.BAD_REQUEST, "Invalid payload");
-        }
-    }
-    catch (error) {
-        throw new appError_1.default(http_status_1.default.BAD_REQUEST, "Failed to add following to user");
-    }
-});
-const getMyFollowers = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        if (payload !== null) {
-            const user = yield user_model_1.default.findOne({ email: payload.email }).select("followers");
-            if (!user) {
-                throw new appError_1.default(http_status_1.default.NOT_FOUND, "User not found");
-            }
-            return user.followers;
-        }
-        else {
-            throw new appError_1.default(http_status_1.default.BAD_REQUEST, "Invalid payload");
-        }
-    }
-    catch (error) {
-        throw new appError_1.default(http_status_1.default.BAD_REQUEST, "Failed to get followers");
-    }
-});
 exports.UserService = {
     findUserFromDB,
     updatedUserIntoDB,
-    addFollowingToUser,
-    getMyFollowers,
 };

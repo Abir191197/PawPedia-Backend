@@ -27,6 +27,7 @@ exports.PetPostModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const CommentSchema = new mongoose_1.Schema({
     authorId: { type: mongoose_1.Schema.Types.ObjectId, required: true },
+    authorName: { type: String, required: true },
     content: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
@@ -38,9 +39,10 @@ const PetPostSchema = new mongoose_1.Schema({
     category: { type: String, enum: ["Tip", "Story"], required: true },
     isPremium: { type: Boolean, default: false },
     PremiumAmount: { type: Number, default: null },
+    PaidByUserPostId: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Users", default: [] }],
     images: [String],
-    upvote: { type: Number, default: 0 },
-    downvote: { type: Number, default: 0 },
+    upvote: { type: [mongoose_1.Schema.Types.ObjectId], ref: "Users" },
+    downvote: { type: [mongoose_1.Schema.Types.ObjectId], ref: "Users" },
     comments: [CommentSchema],
 }, { timestamps: true });
 exports.PetPostModel = mongoose_1.default.model("PetPost", PetPostSchema, "PetPost");

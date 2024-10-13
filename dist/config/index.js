@@ -21,4 +21,7 @@ exports.default = {
     SIGNATURE_KEY: process.env.SIGNATURE_KEY,
     PAYMENT_URL: process.env.PAYMENT_URL,
     PAYMENT_VERIFY_URL: process.env.PAYMENT_VERIFY_URL,
+    cloudinary_cloud_name: process.env.cloudinary_cloud_name,
+    cloudinary_api_key: process.env.cloudinary_api_key,
+    cloudinary_api_secret: process.env.cloudinary_api_secret,
 };

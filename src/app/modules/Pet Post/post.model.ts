@@ -3,6 +3,7 @@ import { IPetPost } from "./post.interface";
 
 const CommentSchema = new Schema({
   authorId: { type: Schema.Types.ObjectId, required: true },
+  authorName: { type: String, required: true },
   content: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
@@ -15,10 +16,11 @@ const PetPostSchema = new Schema(
     content: { type: String, required: true },
     category: { type: String, enum: ["Tip", "Story"], required: true },
     isPremium: { type: Boolean, default: false },
-    PremiumAmount:{ type: Number, default:null },
+    PremiumAmount: { type: Number, default: null },
+    PaidByUserPostId:[{ type: Schema.Types.ObjectId, ref: "Users",default:[] }],
     images: [String],
-    upvote: { type: Number, default: 0 },
-    downvote: { type: Number, default: 0 },
+    upvote:  { type: [Schema.Types.ObjectId], ref: "Users" },
+    downvote:  { type: [Schema.Types.ObjectId], ref: "Users" },
     comments: [CommentSchema],
   },
   { timestamps: true }
