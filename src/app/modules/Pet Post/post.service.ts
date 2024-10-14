@@ -122,11 +122,13 @@ const getAllPosts = async () => {
 const getPostByUserIdFromDB = async (
   userId: string
 ): Promise<IPetPost[] | null> => {
+  
   try {
     const posts = await PetPostModel.find({ authorId: userId });
     if (posts.length === 0) {
       throw new AppError(httpStatus.NOT_FOUND, "No posts found for this user");
     }
+    
     return posts;
   } catch (error) {
     throw new AppError(
@@ -356,7 +358,7 @@ const createFollowingIntoDB = async (postId: string, user :JwtPayload) => {
   if (!petPost) {
     throw new AppError(httpStatus.NOT_FOUND, "Post not found");
   }
-  
+
   // @ts-ignore
   const authorId = petPost.authorId;
 

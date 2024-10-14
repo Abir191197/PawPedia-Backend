@@ -49,7 +49,6 @@ const findUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
 // Controller to handle updating a user profile
 const updatedUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.user) {
-        // Handle case where req.user is undefined
         return (0, sendResponse_1.default)(res, {
             statusCode: http_status_1.default.UNAUTHORIZED,
             success: false,
@@ -57,8 +56,10 @@ const updatedUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
             data: null,
         });
     }
+    const { userdata } = req.body;
+    console.log("userdata", userdata);
     try {
-        const result = yield user_service_1.UserService.updatedUserIntoDB(req.user, req.body);
+        const result = yield user_service_1.UserService.updatedUserIntoDB(req.user, userdata);
         (0, sendResponse_1.default)(res, {
             statusCode: http_status_1.default.OK,
             success: true,
@@ -68,9 +69,48 @@ const updatedUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     }
     catch (error) {
         (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.BAD_REQUEST,
+            success: false,
+            message: error.message || "Failed to update profile",
+            data: null,
+        });
+    }
+}));
+const AllUsersController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.UserService.finAllUserFromDB();
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            message: "User profiles retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, sendResponse_1.default)(res, {
             statusCode: http_status_1.default.INTERNAL_SERVER_ERROR,
             success: false,
-            message: "Failed to update profile",
+            message: "Failed to retrieve user profiles",
+            data: null,
+        });
+    }
+}));
+const UserDeleteController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.params);
+    try {
+        const result = yield user_service_1.UserService.userDeleteFromDB(req.params);
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            message: "User Delete successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, sendResponse_1.default)(res, {
+            statusCode: http_status_1.default.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: "Failed to Delete user profile",
             data: null,
         });
     }
@@ -78,4 +118,6 @@ const updatedUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
 exports.userControllers = {
     findUser,
     updatedUser,
+    AllUsersController,
+    UserDeleteController,
 };

@@ -43,7 +43,9 @@ const createPost = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const getPostByUserId = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const post = yield post_service_1.PetPostService.getPostByUserIdFromDB(req.params.id);
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
+    const post = yield post_service_1.PetPostService.getPostByUserIdFromDB(userId);
     if (!post) {
         return (0, sendResponse_1.default)(res, {
             statusCode: http_status_1.default.NOT_FOUND,
@@ -55,7 +57,7 @@ const getPostByUserId = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Pet post retrieved successfully",
+        message: "user post retrieved successfully",
         data: post,
     });
 }));

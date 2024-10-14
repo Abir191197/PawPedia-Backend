@@ -41,8 +41,8 @@ router.post(
 
 
 router.get(
-  "/posts/:UserId",
-  
+  "/posts/MyContents",
+  auth(USER_ROLE.admin, USER_ROLE.user),
   petPostControllers.getPostByUserId // Get a specific pet post by ID
 );
 

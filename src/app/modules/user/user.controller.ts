@@ -37,9 +37,9 @@ const findUser = catchAsync(async (req, res) => {
 });
 
 // Controller to handle updating a user profile
+
 const updatedUser = catchAsync(async (req, res) => {
   if (!req.user) {
-    // Handle case where req.user is undefined
     return sendResponse(res, {
       statusCode: httpStatus.UNAUTHORIZED,
       success: false,
@@ -48,8 +48,11 @@ const updatedUser = catchAsync(async (req, res) => {
     });
   }
 
+  const { userdata } = req.body; 
+  console.log("userdata", userdata);
+
   try {
-    const result = await UserService.updatedUserIntoDB(req.user, req.body);
+    const result = await UserService.updatedUserIntoDB(req.user, userdata);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -57,11 +60,57 @@ const updatedUser = catchAsync(async (req, res) => {
       message: "Profile updated successfully",
       data: result,
     });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: error.message || "Failed to update profile",
+      data: null,
+    });
+  }
+});
+
+
+const AllUsersController = catchAsync(async (req, res) => {
+  
+  try {
+    const result = await UserService.finAllUserFromDB();
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User profiles retrieved successfully",
+      data: result,
+    });
+  } catch (error) {
+    
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message:  "Failed to retrieve user profiles",
+      data: null,
+    });
+  }
+});
+
+
+const UserDeleteController = catchAsync(async (req, res) => {
+ 
+console.log(req.params);
+  try {
+    const result = await UserService.userDeleteFromDB(req.params);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User Delete successfully",
+      data: result,
+    });
   } catch (error) {
     sendResponse(res, {
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       success: false,
-      message: "Failed to update profile",
+      message: "Failed to Delete user profile",
       data: null,
     });
   }
@@ -69,13 +118,10 @@ const updatedUser = catchAsync(async (req, res) => {
 
 
 
-
-
-
-
   
 export const userControllers = {
   findUser,
   updatedUser,
- 
+  AllUsersController,
+  UserDeleteController,
 };

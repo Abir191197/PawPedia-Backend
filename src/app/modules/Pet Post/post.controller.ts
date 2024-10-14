@@ -34,7 +34,11 @@ console.log("payload", payload)
 
 
 const getPostByUserId = catchAsync(async (req, res) => {
-  const post = await PetPostService.getPostByUserIdFromDB(req.params.id);
+
+  
+  const userId = req.user?._id;
+
+  const post = await PetPostService.getPostByUserIdFromDB(userId);
   if (!post) {
     return sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
@@ -46,9 +50,11 @@ const getPostByUserId = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Pet post retrieved successfully",
+    message: "user post retrieved successfully",
     data: post,
   });
+
+ 
 });
 
 const updatePost = catchAsync(async (req, res) => {

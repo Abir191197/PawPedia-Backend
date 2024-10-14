@@ -30,7 +30,7 @@ sendImageToCloud_1.upload.single("file"),
     }
     next();
 }, post_controller_1.petPostControllers.createPost);
-router.get("/posts/:UserId", post_controller_1.petPostControllers.getPostByUserId // Get a specific pet post by ID
+router.get("/posts/MyContents", (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.user), post_controller_1.petPostControllers.getPostByUserId // Get a specific pet post by ID
 );
 router.put("/posts/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.user), post_controller_1.petPostControllers.updatePost // Update an existing pet post
 );
