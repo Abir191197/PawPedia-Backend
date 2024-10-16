@@ -16,22 +16,22 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 // CORS Options
-const corsOptions = {
-    origin: [
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "https://paw-pedia-frontend.vercel.app",
-        "https://paw-pedia-backend.vercel.app",
-    ],
-    credentials: true,
-    methods: "GET,POST,PUT,DELETE",
-    optionsSuccessStatus: 200,
-    allowedHeaders: "Content-Type, Authorization",
-};
 // const corsOptions = {
-//   origin: "*", // Allow all origins
+//   origin: [
+//     "http://localhost:5173",
+//     "http://localhost:3000",
+//     "https://paw-pedia-frontend.vercel.app",
+//     "https://paw-pedia-backend.vercel.app",
+//   ],
 //   credentials: true,
+//   methods: "GET,POST,PUT,DELETE",
+//   optionsSuccessStatus: 200,
+//   allowedHeaders: "Content-Type, Authorization",
 // };
+const corsOptions = {
+    origin: "*", // Allow all origins
+    credentials: true,
+};
 app.use((0, cors_1.default)(corsOptions));
 // CORS Middleware
 app.use((0, cors_1.default)(corsOptions));
