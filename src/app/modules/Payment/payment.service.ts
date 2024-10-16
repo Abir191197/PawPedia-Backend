@@ -18,7 +18,7 @@ const confirmationService = async (
     let templateFile;
 
     // Determine status message and template based on verification response
-    if (status === "success") {
+    if (status === "success" && verifyResponse.pay_status === "Successful") {
       statusMessage = "Payment successful";
       templateFile = "ConfirmationSuccess.html";
 

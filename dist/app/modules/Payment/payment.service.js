@@ -21,7 +21,7 @@ const confirmationService = (bookingId, status, userId, postId) => __awaiter(voi
         let statusMessage;
         let templateFile;
         // Determine status message and template based on verification response
-        if (status === "success") {
+        if (status === "success" && verifyResponse.pay_status === "Successful") {
             statusMessage = "Payment successful";
             templateFile = "ConfirmationSuccess.html";
             // Update the payment status in the database by pushing the userId into the array
