@@ -146,6 +146,7 @@ const DownVote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
 const PaymentController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { postId } = req.params;
     const user = req.user;
+    console.log(postId, user);
     // Call the service function to handle the downvote
     const post = yield post_service_1.PetPostService.paymentService(postId, user);
     console.log(postId);

@@ -32,7 +32,7 @@ export async function sendPaymentRequest(userData: UserData) {
     tran_id: userData.bookingId, // Transaction/booking ID
     success_url: `https://paw-pedia-backend.vercel.app/api/payment/confirmation?postId=${userData.postId}&userId=${userData.userId}&bookingId=${userData.bookingId}&status=success`,
     fail_url: `https://paw-pedia-backend.vercel.app/api/payment/confirmation?bookingId=${userData.bookingId}&status=failed`,
-    cancel_url: "https://paw-pedia-frontend.vercel.app/", // Update the frontend cancel URL
+    cancel_url: "https://paw-pedia-frontend.vercel.app/user", // Update the frontend cancel URL
     amount: (100).toFixed(2), // Fixed amount (can be dynamic if needed)
     currency: "BDT", // Currency (Bangladeshi Taka)
     desc: "Advance Payment", // Description of the transaction

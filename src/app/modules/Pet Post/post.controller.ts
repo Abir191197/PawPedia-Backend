@@ -161,7 +161,7 @@ const PaymentController = catchAsync(async (req, res) => {
   const { postId } = req.params; 
   const user = req.user;
   
-
+console.log(postId, user);
   
 
   // Call the service function to handle the downvote

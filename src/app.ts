@@ -19,6 +19,7 @@ const corsOptions = {
     "http://localhost:5173",
     "http://localhost:3000",
     "https://paw-pedia-frontend.vercel.app",
+    "https://paw-pedia-backend.vercel.app",
   ],
   credentials: true,
   methods: "GET,POST,PUT,DELETE",
